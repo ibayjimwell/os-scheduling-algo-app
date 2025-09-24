@@ -31,7 +31,15 @@ function App() {
       </div>
       
       <div className='mx-4'>
-        <Table />
+        <Table data={
+          [
+            { 'Process': 'P1', 'Arrival Time': 0, 'Burst Time': 8 },
+            { 'Process': 'P2', 'Arrival Time': 1, 'Burst Time': 4 },
+            { 'Process': 'P3', 'Arrival Time': 2, 'Burst Time': 9 },
+            { 'Process': 'P4', 'Arrival Time': 3, 'Burst Time': 5 }
+          ]
+        }
+        />
       </div>
 
     </>
