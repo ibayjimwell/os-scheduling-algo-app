@@ -4,9 +4,7 @@ import React from 'react'
 // Props: 
 // - algos: Array of objects with name and key properties
 // Functionality: Select one algorithm at a time, highlight the selected one
-function AlgoSelector({algos}) {
-
-    const [selectedAlgo, setSelectedAlgo] = React.useState('');
+function AlgoSelector({algos, selectedAlgo, setSelectedAlgo}) {
 
     const handleSelect = (algo) => {
         setSelectedAlgo(algo);
@@ -14,7 +12,7 @@ function AlgoSelector({algos}) {
 
     return (
         <>
-            <div className="w-auto text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+            <div className="w-auto text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-md">
                 {
                     algos.map((algo, idx) => {
                         const isSelected = selectedAlgo === algo.key;

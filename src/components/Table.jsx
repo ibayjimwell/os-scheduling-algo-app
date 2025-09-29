@@ -1,20 +1,63 @@
 import React from 'react'
-import EditModal from './EditModal';
+import Modal from './Modal';
 
 // Table component to display array of objects in a tabular format
-function Table({ data }) {
-    const [showAddRow, setShowAddRow] = React.useState(false);
+function Table({ data, selectedAlgo }) {
+    const [showModal, setShowModal] = React.useState(false);
+    const [modalConfig, setModalConfig] = React.useState({});
 
     // Get table headers from keys of the first object
-    const headers = Object.keys(data[0]);
+    const headers = data && data.length > 0 ? Object.keys(data[0]) : [];
+
+    
+    const handleShowingModal = (type) => {
+
+        if (selectedAlgo == '') {
+            setModalConfig({
+                type: 'message',
+                header: 'Select a Algorithm',
+                message: 'Make sure to select a algorithm to the selector before to perform some operations.'
+            })
+            setShowModal(true);
+            return
+        }
+
+        switch (type) {
+            case 'edit':
+                setModalConfig({
+                    type: type,
+                    header: 'Wala pa',
+                    labels: ['Arrival Time', 'Burst Time']
+                })
+                setShowModal(true);
+                break;
+            case 'addrow':
+                setModalConfig({
+                    type: type,
+                    labels: ['Arrival Time', 'Burst Time']
+                })
+                setShowModal(true);
+                break;
+            default:
+                setShowModal(false);
+
+        }
+        
+    }
 
     return (
         <>
-            <EditModal />
+
+            {
+                showModal && 
+                 <Modal 
+                    setShow={setShowModal}
+                    config={modalConfig}
+                />
+            }
+
             <div
                 className="relative overflow-x-auto shadow-md sm:rounded-lg"
-                onMouseEnter={() => setShowAddRow(true)}
-                onMouseLeave={() => setShowAddRow(false)}
             >
                 <table className="w-full text-md text-center rtl:text-right text-gray-500">
                     <thead className="text-lg text-gray-50 uppercase bg-blue-700">
@@ -38,17 +81,20 @@ function Table({ data }) {
                                     </td>
                                 ))}
                                 <td className="px-6 py-4">
-                                    <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                                    <a onClick={() => handleShowingModal('edit')} className="font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                {showAddRow &&
-                    <button className='inline-flex justify-center text-lg text-blue-700 bg-transparent w-full boorder-none hover:bg-blue-100 hover:text-blue-800 px-4 py-2 cursor-pointer'>
-                        + Add Row
-                    </button>
-                }
+                <button 
+                    onClick={
+                        () => handleShowingModal('addrow')
+                    }
+                    className='inline-flex justify-center text-lg text-blue-700 bg-white w-full boorder-none hover:bg-blue-100 hover:text-blue-800 px-4 py-2 cursor-pointer'
+                    >
+                    + Add Row
+                </button>
             </div>
         </>
     )

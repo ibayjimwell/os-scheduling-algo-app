@@ -5,6 +5,10 @@ import Table from './components/Table.jsx'
 
 // The root component of the application
 function App() {
+
+  // Get the selectd Algorithm
+  const [selectedAlgo, setSelectedAlgo] = React.useState('');
+
   return (
     <>
       <Navbar title='Operating System Scheduling'/>
@@ -26,6 +30,8 @@ function App() {
                 key: 'RR'
               }
           ]}
+          selectedAlgo={selectedAlgo}
+          setSelectedAlgo={setSelectedAlgo}
         />
         
       </div>
@@ -33,12 +39,10 @@ function App() {
       <div className='mx-4'>
         <Table data={
           [
-            { 'Process': 'P1', 'Arrival Time': 0, 'Burst Time': 8 },
-            { 'Process': 'P2', 'Arrival Time': 1, 'Burst Time': 4 },
-            { 'Process': 'P3', 'Arrival Time': 2, 'Burst Time': 9 },
-            { 'Process': 'P4', 'Arrival Time': 3, 'Burst Time': 5 }
+            { 'Process': 'Process 0', 'Arrival Time': 0, 'Burst Time': 0, 'Completed Time': 0, 'Turnaround Time': 0 },
           ]
         }
+        selectedAlgo={selectedAlgo}
         />
       </div>
 
