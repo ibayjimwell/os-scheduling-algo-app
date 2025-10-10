@@ -10,3 +10,9 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+[
+    { 'Process': 'Process 0', 'Arrival Time': 3, 'Burst Time': 6, 'Completion Time': null, 'Turnaround Time': null, 'Waiting Time': null },
+    { 'Process': 'Process 1', 'Arrival Time': 4, 'Burst Time': 5, 'Completion Time': null, 'Turnaround Time': null, 'Waiting Time': null },
+    { 'Process': 'Process 2', 'Arrival Time': 1, 'Burst Time': 9, 'Completion Time': null, 'Turnaround Time': null, 'Waiting Time': null },
+]

@@ -1,17 +1,66 @@
 import React from 'react'
+import ModalBody_SimpleMessage from './ModalBody_SimpleMessage.jsx'
+import ModalBody_AddRow from './ModalBody_AddRow.jsx'
+import ModalBody_EditRow from './ModalBody_EditRow.jsx'
 
 function Modal({setShow, config}) {
 
-    const handleButtonClicked = () => {
+    // The form's memory for what the user is typing
+    const [inputValues, setInputValues] = React.useState({}); 
 
+    // When the modal opens, if it's an 'edit' type, 
+    // copy the existing data from 'config.values' into the form's memory.
+    React.useEffect(() => {
+        if (config.type == 'edit' && config.values) {
+            setInputValues({...config.values}); // {...} is essential! It makes a copy!
+        }
+    }, []); // [] means: Do this only once when the modal first appears.
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target; // Get the input's name and what the user typed
+
+        // The safe way to update an object in React:
+        setInputValues((prevValues) => ({
+            ...prevValues,     // 1. Take a copy of everything already in memory (inputValues)
+            [name]: value      // 2. ONLY overwrite or add the one field that just changed.
+        }));
+    }
+
+    // Different modal body components for different types of modals
+     const renderModalBody = () => {
         switch (config.type) {
             case 'message':
-                setShow(false)
-                break
+            case 'delete':
+                // For simple message or delete confirmation
+                return (
+                    <ModalBody_SimpleMessage
+                        config={config}
+                        setShow={setShow}
+                    />
+                );
+            case 'addrow':
+                // For adding a new row (requires complex data manipulation)
+                return (
+                    <ModalBody_AddRow
+                        config={config}
+                        setShow={setShow}
+                        inputValues={inputValues}
+                        handleInputChange={handleInputChange}
+                    />
+                );
+            case 'edit':
+                // For editing an existing row
+                return (
+                    <ModalBody_EditRow
+                        config={config}
+                        setShow={setShow}
+                        inputValues={inputValues}
+                        handleInputChange={handleInputChange}
+                    />
+                );
             default:
-                break
+                return <div className="p-4 text-red-500">Invalid modal configuration type.</div>;
         }
-
     }
 
     return (
@@ -25,7 +74,8 @@ function Modal({setShow, config}) {
                             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
                                 <h3 className="text-xl font-semibold text-gray-900">
                                     { 
-                                        config.type == 'edit' ? `Edit the value of ${config.header}` : 
+                                        config.type == 'edit' ? `Edit ${config.header}` : 
+                                        config.type == 'delete' ? `Delete ${config.header}` :
                                         config.type == 'addrow' ? 'Add new row' : 
                                         config.type == 'message' ? config.header :
                                         'Modal Component'
@@ -40,40 +90,7 @@ function Modal({setShow, config}) {
                             </div>
                             {/* Modal body */}
                             <div className="p-4 md:p-5">
-                                <div className="space-y-4" action="#">
-                                    {
-                                    config.type != 'message' ?
-                                    config.labels.map((label, index) => (
-                                        <div key={index}>
-                                            <label className="block mb-2 text-base font-medium text-gray-900">{label}</label>
-                                            <input 
-                                                type="number" 
-                                                name={label} 
-                                                id={label}
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                                required 
-                                            />
-                                        </div>
-                                    )) :
-                                        (
-                                            <div className='text-gray-800 text-base'>
-                                                {config.message}
-                                            </div>
-                                        )
-                                    }
-                                    <button 
-                                        type="submit" 
-                                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
-                                        onClick={() => handleButtonClicked()}
-                                    >
-                                        { 
-                                            config.type == 'edit' ? 'Done' : 
-                                            config.type == 'addrow' ? 'Add Row' : 
-                                            config.type == 'message' ? 'Ok' :
-                                            'Button'
-                                        }
-                                    </button>
-                                </div>
+                                { renderModalBody() }
                             </div>
                         </div>
                     </div>
